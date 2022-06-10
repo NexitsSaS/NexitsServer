@@ -21,6 +21,7 @@ model employee {
   id    Int    @id @default(autoincrement())
   name  String
   email String @unique
+  password String
   order order?
   cart  cart?
 }
@@ -55,14 +56,18 @@ model product {
 
 model producteditor {
   id      Int       @id @default(autoincrement())
-  name    String
+  name  String
+  email String @unique
+  password String
   product product[]
 }
 
 //we have to do a meeting to finish the stuff underneath yhis line xD
 model clientadmin {
   id   Int    @id @default(autoincrement())
-  name String
+  name  String
+  email String @unique
+  password String
 }
 
 // model account {
