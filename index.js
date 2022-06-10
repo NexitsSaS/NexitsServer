@@ -6,12 +6,12 @@ require("dotenv").config();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/auth", require("./routes/auth"));
+// app.use("/api/auth", require("./routes/auth"));
 // app.use("/api/posts", require("./routes/post"));
 // app.use("/api/user", require("./routes/portfolio"));
 ///////////////////////////////////////////
 app.use(function (req, res, next) {
-  res.json({ error: "Not found" });
+  res.json({ error: "server works" });
 });
 /////////////////////////////////////////////////
 app.listen(process.env.PORT, () => {
