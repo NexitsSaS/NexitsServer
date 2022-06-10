@@ -28,9 +28,9 @@ model employee {
 model order {
   id          Int         @id @default(autoincrement())
   employee    employee?   @relation(fields: [employeeID], references: [id])
-  employeeID  Int         @unique
+  employeeID  Int         
   cart        cart?       @relation(fields: [cartID], references: [id])
-  cartID      Int         @unique
+  cartID      Int         
   isapprouved Boolean     @default(false)
   state       order_state
 }
@@ -38,19 +38,28 @@ model order {
 model cart {
   id         Int       @id @default(autoincrement())
   employee   employee? @relation(fields: [employeeID], references: [id])
-  employeeID Int       @unique
+  employeeID Int       
   order      order?
   product    product[]
 }
 
 model product {
-  id     Int    @id @default(autoincrement())
-  name   String
-  price  Int
-  cart   cart?  @relation(fields: [cartID], references: [id])
-  cartID Int
+  id              Int            @id @default(autoincrement())
+  name            String
+  price           Int
+  cart            cart?          @relation(fields: [cartID], references: [id])
+  cartID          Int
+  producteditor   producteditor? @relation(fields: [producteditorID], references: [id])
+  producteditorID Int
 }
 
+model producteditor {
+  id      Int       @id @default(autoincrement())
+  name    String
+  product product[]
+}
+
+//we have to do a meeting to finish the stuff underneath yhis line xD
 model clientadmin {
   id   Int    @id @default(autoincrement())
   name String
