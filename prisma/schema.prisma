@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum order_state {
+  Placed
+  Pending
+  Approuved
+  Archived
+}
+
+model employee {
+  id    Int    @id @default(autoincrement())
+  name  String
+  email String @unique
+  order order?
+  cart  cart?
+}
+
+model order {
+  id          Int         @id @default(autoincrement())
+  employee    employee?   @relation(fields: [employeeID], references: [id])
+  employeeID  Int         @unique
+  cart        cart?       @relation(fields: [cartID], references: [id])
+  cartID      Int         @unique
+  isapprouved Boolean     @default(false)
+  state       order_state
+}
+
+model cart {
+  id         Int       @id @default(autoincrement())
+  employee   employee? @relation(fields: [employeeID], references: [id])
+  employeeID Int       @unique
+  order      order?
+  product    product[]
+}
+
+model product {
+  id     Int    @id @default(autoincrement())
+  name   String
+  price  Int
+  cart   cart?  @relation(fields: [cartID], references: [id])
+  cartID Int
+}
+
+model clientadmin {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+// model account {
+//   id       Int    @id @default(autoincrement())
+//   user     user?  @relation(fields: [userID], references: [id])
+//   userID   Int
+//   email    String @unique
+//   password String
+
+// }
+
+// model user {
+//   id              Int               @id @default(autoincrement())
+//   fname           String
+//   lname           String
+//   type            user_type
+//   posts           post[]
+//   comments        comment[]
+//   date            DateTime          @default(now())
+//   skills          skill[]
+//   portfolio       portfolio?        @relation(fields: [portfolioID], references: [id])
+//   portfolioID     Int?              @unique
+//   skill_rating    skill_rating?
+//   overall_rating  overall_rating?
+//   failed_skills   failed_skills[]
+//   verified_skills verified_skills[]
+//   badges          badges[]
+//   accounts        account[]
+//   joboffers       joboffers?
+// }
