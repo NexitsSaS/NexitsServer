@@ -11,71 +11,89 @@ datasource db {
 }
 
 enum order_state {
+  Cart
   Placed
   Pending
   Approuved
   Archived
 }
 
-model employee {
-  id    Int    @id @default(autoincrement())
-  name  String
-  email String @unique
-  password String
-  order order?
-  cart  cart?
+enum budget_type {
+  default
+  special
 }
+
+model employee {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  order    order?
+  teams    teams[]
+}
+
+model budget {
+  id      Int         @id @default(autoincrement())
+  budget  budget_type
+  amount  Int
+  teams   teams?      @relation(fields: [teamsID], references: [id])
+  teamsID Int
+
+}
+
+model teams {
+  id         Int       @id @default(autoincrement())
+  name       String
+  department String
+  employee   employee? @relation(fields: [employeeID], references: [id])
+  employeeID Int
+  budget     budget[]
+}
+
 
 model order {
   id          Int         @id @default(autoincrement())
   employee    employee?   @relation(fields: [employeeID], references: [id])
-  employeeID  Int         
-  cart        cart?       @relation(fields: [cartID], references: [id])
-  cartID      Int         
+  employeeID  Int         @unique
   isapprouved Boolean     @default(false)
   state       order_state
-}
-
-model cart {
-  id         Int       @id @default(autoincrement())
-  employee   employee? @relation(fields: [employeeID], references: [id])
-  employeeID Int       
-  order      order?
-  product    product[]
+  product     product[]
 }
 
 model product {
   id              Int            @id @default(autoincrement())
   name            String
   price           Int
-  cart            cart?          @relation(fields: [cartID], references: [id])
-  cartID          Int
+  quantity        Int
+  instock         Boolean        @default(true)
   producteditor   producteditor? @relation(fields: [producteditorID], references: [id])
   producteditorID Int
+  order           order?         @relation(fields: [productID], references: [id])
+  productID       Int
 }
 
 model producteditor {
-  id      Int       @id @default(autoincrement())
-  name  String
-  email String @unique
+  id       Int       @id @default(autoincrement())
+  name     String
+  email    String    @unique
   password String
-  product product[]
+  product  product[]
 }
 
 //we have to do a meeting to finish the stuff underneath yhis line xD
 model clientadmin {
-  id   Int    @id @default(autoincrement())
-  name  String
-  email String @unique
-  password String
-}
-model superadmin {
-  id   Int    @id @default(autoincrement())
-  name  String
-  email String @unique
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
   password String
 }
 
+model superadmin {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+}
 
 // model account {
 //   id       Int    @id @default(autoincrement())
