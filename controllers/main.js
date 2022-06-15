@@ -1,9 +1,28 @@
-
 //-------------------------this is a controller exemple------------------------//
 
 // const authService = require("../service/auth");
 // var jwt = require("jsonwebtoken");
-// const _error = require("../error");
+const _error = require("../error");
+const mainService = require("../service/main");
+
+exports.getproducts = async (req, res) => {
+  try {
+    const data = await mainService.fetchproducts();
+    res.json(data);
+  } catch (error) {
+    res.json(_error("an error occured"));
+  }
+};
+
+exports.getorders = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const data = await mainService.fetchorders(id);
+    res.json(data);
+  } catch (error) {
+    res.json(_error("an error occured"));
+  }
+};
 
 // exports.login = async (req, res) => {
 //   try {

@@ -28,7 +28,8 @@ model employee {
   name     String
   email    String  @unique
   password String
-  order    order?
+  order    order?  @relation(fields: [orderID], references: [id])
+  orderID  Int
   teams    teams[]
 }
 
@@ -50,14 +51,12 @@ model teams {
   budget     budget[]
 }
 
-
 model order {
-  id          Int         @id @default(autoincrement())
-  employee    employee?   @relation(fields: [employeeID], references: [id])
-  employeeID  Int         @unique
+  id Int @id @default(autoincrement())
   isapprouved Boolean     @default(false)
   state       order_state
   product     product[]
+  employee    employee?
 }
 
 model product {
@@ -67,9 +66,9 @@ model product {
   quantity        Int
   instock         Boolean        @default(true)
   producteditor   producteditor? @relation(fields: [producteditorID], references: [id])
-  producteditorID Int
-  order           order?         @relation(fields: [productID], references: [id])
-  productID       Int
+  producteditorID Int?
+  order           order?         @relation(fields: [orderID], references: [id])
+  orderID         Int?
 }
 
 model producteditor {
@@ -94,32 +93,3 @@ model superadmin {
   email    String @unique
   password String
 }
-
-// model account {
-//   id       Int    @id @default(autoincrement())
-//   user     user?  @relation(fields: [userID], references: [id])
-//   userID   Int
-//   email    String @unique
-//   password String
-
-// }
-
-// model user {
-//   id              Int               @id @default(autoincrement())
-//   fname           String
-//   lname           String
-//   type            user_type
-//   posts           post[]
-//   comments        comment[]
-//   date            DateTime          @default(now())
-//   skills          skill[]
-//   portfolio       portfolio?        @relation(fields: [portfolioID], references: [id])
-//   portfolioID     Int?              @unique
-//   skill_rating    skill_rating?
-//   overall_rating  overall_rating?
-//   failed_skills   failed_skills[]
-//   verified_skills verified_skills[]
-//   badges          badges[]
-//   accounts        account[]
-//   joboffers       joboffers?
-// }
